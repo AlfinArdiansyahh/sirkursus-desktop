@@ -1,3 +1,4 @@
+
 package model;
 
 public class Orang {
@@ -6,9 +7,9 @@ public class Orang {
     private String noHp;
 
     public Orang(int id, String nama, String noHp) {
-        this.id = id;
-        this.nama = nama;
-        this.noHp = noHp;
+        setId(id);
+        setNama(nama);
+        setNoHp(noHp);
     }
 
     public int getId() {
@@ -16,6 +17,11 @@ public class Orang {
     }
 
     public void setId(int id) {
+        if (id < 0) {
+            throw new IllegalArgumentException(
+                "ID tidak boleh negatif"
+            );
+        }
         this.id = id;
     }
 
@@ -24,7 +30,12 @@ public class Orang {
     }
 
     public void setNama(String nama) {
-        this.nama = nama;
+        if (nama == null || nama.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                "Nama wajib diisi"
+            );
+        }
+        this.nama = nama.trim();
     }
 
     public String getNoHp() {
@@ -32,12 +43,22 @@ public class Orang {
     }
 
     public void setNoHp(String noHp) {
-        this.noHp = noHp;
+        String nilai =
+            noHp == null ? "" : noHp.trim();
+
+        if (!nilai.isEmpty()
+                && !nilai.matches("[0-9+ -]{8,20}")) {
+            throw new IllegalArgumentException(
+                "Format nomor HP tidak valid"
+            );
+        }
+        this.noHp = nilai;
     }
 
     public String getInfo() {
         return "ID: " + id
                 + " | Nama: " + nama
-                + " | No. HP: " + noHp;
+                + " | No. HP: "
+                + (noHp.isEmpty() ? "-" : noHp);
     }
 }
